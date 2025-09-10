@@ -16,7 +16,7 @@ export default class PlaylisterController {
 
     /**
      * This function defines the event handlers that will respond to interactions
-     * with all the static user interface controls, meaning the controls that
+     * with all the static user interface elements, meaning the controls that
      * exist in the original Web page. Note that additional handlers will need
      * to be initialized for the dynamically loaded content, like for controls
      * that are built as the user interface is interacted with.
@@ -106,6 +106,10 @@ export default class PlaylisterController {
      * to register event handling.
     */
     registerPlaylistCardHandlers(id) {
+        // handle adding new playlist
+        document.getElementById("add-playlist-button").onmousedown = (event) => {
+            this.model.addNewList("Untitled", []);
+        }
         // HANDLES SELECTING A PLAYLIST
         document.getElementById("playlist-card-" + id).onmousedown = (event) => {
             if (!this.model.isListNameBeingChanged()) {
@@ -137,6 +141,13 @@ export default class PlaylisterController {
             // OPEN UP THE DIALOG
             deleteListModal.classList.add("is-visible");
             this.model.toggleConfirmDialogOpen();
+        }
+        // duplicating a list
+        document.getElementById("duplicate-list-button-" + id).onmousedown = (event) => {
+            // DON'T PROPOGATE THIS INTERACTION TO LOWER-LEVEL CONTROLS
+            this.ignoreParentClick(event);
+            let originalList = this.model.getList(this.model.getListIndex(id));
+            this.model.addList(originalList);
         }
         // FOR RENAMING THE LIST NAME
         document.getElementById("playlist-card-" + id).ondblclick = (event) => {
