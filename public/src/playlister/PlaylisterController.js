@@ -193,7 +193,7 @@ export default class PlaylisterController {
             let card = document.getElementById("song-card-" + (i + 1));
 
             // USER WANTS TO EDIT THE SONG
-            card.ondblclick = (event) => {
+            card.onclick = (event) => {
                 // DON'T PROPOGATE THE EVENT
                 this.ignoreParentClick(event);
 
@@ -216,7 +216,7 @@ export default class PlaylisterController {
             }
 
             // USER WANTS TO REMOVE A SONG FROM THE PLAYLIST
-            let removeSongButton = document.getElementById("remove-song-" + i);
+            let removeSongButton = document.getElementById("remove-song-" + i+1);
             removeSongButton.onclick = (event) => {
                 // DON'T PROPOGATE THE EVENT
                 this.ignoreParentClick(event);

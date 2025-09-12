@@ -34,7 +34,8 @@ export default class PlaylisterView {
         let playlistCard = document.getElementById("playlist-card-prototype").cloneNode(true);
         playlistCard.id = listId;
         playlistCard.classList.add("playlist-card", "unselected-playlist-card");
-
+        
+        //look inside prototype for the first span text.
         playlistCard.querySelector("span").id = "playlist-card-text-" + newList.id;
         playlistCard.querySelector("span").textContent = newList.name;
         
@@ -52,6 +53,45 @@ export default class PlaylisterView {
 
         // SETUP THE HANDLER FOR WHEN SOMEONE MOUSE CLICKS ON OUR LIST
         this.controller.registerPlaylistCardHandlers(newList.id);
+    }
+
+    /**
+     * Adds a song card to the selected playlist
+     * 
+     * @param {Song} song The list to be added.
+     * @param {id} id is the "index" of the song.
+     */
+    appendSongToView(song, id) {
+        // EACH CARD WILL HAVE A UNIQUE ID
+        let songId = "song-card-" + id;
+
+        // MAKE A DEEP COPY OF THE PROTOTYPE FOR OUR NEW PLAYLIST CARD
+        let songCard = document.getElementById("song-card-prototype").cloneNode(true);
+        songCard.id = songId;  
+        songCard.classList.add("song-card", "unselected-song-card");
+
+        //look inside prototype for the first span tag.
+        songCard.querySelector("a").id += id;
+        songCard.querySelector('span[id^="song-card-year-"]').id += id;
+        songCard.querySelector('span[id^="song-card-by-"]').id += id;
+        songCard.querySelector('span[id^="song-card-artist-"]').id += id;
+
+        songCard.querySelector("a").innerHTML += song.title;
+        songCard.querySelector('span[id^="song-card-year-"]').innerHTML = "(" + song.year + ")";
+        songCard.querySelector('span[id^="song-card-by-"]').innerHTML = "by";
+        songCard.querySelector('span[id^="song-card-artist-"]').innerHTML = song.artist;
+
+        // let textInput = songCard.querySelector("#song-card-text-input-");
+        // textInput.id += song.youTubeId;
+
+        songCard.querySelector('input[id^="remove-song-"]').id += id;
+        //songCard.querySelector('input[id^="duplicate-song-button-"]').id += song.youTubeId;
+
+        songCard.hidden = false;
+
+        // AND PUT THE NEW CARD INTO THE LISTS DIV
+        let songsElement = document.getElementById("song-cards");
+        songsElement.appendChild(songCard);
     }
 
     /**
@@ -151,13 +191,28 @@ export default class PlaylisterView {
         }
     }
 
+    refreshSongCards(playlist) {
+        // GET THE UI CONTROL WE WILL APPEND IT TO
+        let listsElement = document.getElementById("song-cards");
+        listsElement.innerHTML = "";
+
+        // APPEND A SELECTION CARD FOR EACH PLAYLIST
+        for (let i = 0; i < playlist.songs.length; i++) {
+            let song = playlist.getSongAt(i);
+            this.appendSongToView(song, i+1);
+        }
+
+        // SETUP THE HANDLERS FOR ALL SONG CARDS AFTER ALL CARDS ARE CREATED
+        this.controller.registerSongCardHandlers();
+    }
+
     /**
      * Called each time a song is added, removed, moved, or updated,
      * this function rebuilds all the song cards for the selected playlist.
      * 
      * @param {Playlist} playlist The playlist whose songs are to be reshown.
      */
-    refreshSongCards(playlist) {
+    refreshSongCardsOld(playlist) {
         // CLEAR OUT THE OLD SONG CARDS
         let itemsDiv = document.getElementById("song-cards");
         itemsDiv.innerHTML = "";
