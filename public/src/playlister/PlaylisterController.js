@@ -144,6 +144,11 @@ export default class PlaylisterController {
             let deleteListModal = document.getElementById("delete-list-modal");
             deleteListModal.classList.remove("is-visible");
         }
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                document.getElementById("delete-list-confirm-button").onclick();
+            }
+        })
 
         // RESPOND TO THE USER CLOSING THE DELETE PLAYLIST MODAL
         document.getElementById("delete-list-cancel-button").onclick = (event) => {
