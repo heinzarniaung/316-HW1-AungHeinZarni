@@ -79,4 +79,5 @@ export default class Playlist {
     setSongs(initSongs) {
         this.songs = initSongs;
     }
+
 }

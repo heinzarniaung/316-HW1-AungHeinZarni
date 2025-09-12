@@ -1,3 +1,5 @@
+import PlaylistBuilder from "./PlaylistBuilder.js";
+
 /**
  * This class provides responses for all user interface interactions.
  * 
@@ -73,8 +75,9 @@ export default class PlaylisterController {
             // use modal inputs to change currentList
             let newSongTitle = document.getElementById("edit-song-modal-title-textfield").value;
             let newSongArtist = document.getElementById("edit-song-modal-artist-textfield").value;
+            let newSongYear = document.getElementById("edit-song-modal-year-textfield").value;
             let newSongYtId = document.getElementById("edit-song-modal-youTubeId-textfield").value;
-            let newSongArray = [newSongTitle, newSongArtist, newSongYtId];
+            let newSongArray = [newSongTitle, newSongArtist, newSongYear, newSongYtId];
             let oldSongArray = this.model.getOldSongArray();
             const songIndex = this.model.getEditSongIndex();
             
@@ -204,7 +207,7 @@ export default class PlaylisterController {
             // DON'T PROPOGATE THIS INTERACTION TO LOWER-LEVEL CONTROLS
             this.ignoreParentClick(event);
             let originalList = this.model.getList(this.model.getListIndex(id));
-            this.model.addList(originalList);
+            this.model.addNewList(originalList.getName()+" (Copy)", originalList.songs);
         }
         // FOR RENAMING THE LIST NAME
         document.getElementById("playlist-card-" + id).ondblclick = (event) => {
@@ -271,6 +274,7 @@ export default class PlaylisterController {
                 if (song) {
                     document.getElementById("edit-song-modal-title-textfield").value = song.title;
                     document.getElementById("edit-song-modal-artist-textfield").value = song.artist;
+                    document.getElementById("edit-song-modal-year-textfield").value = song.year;
                     document.getElementById("edit-song-modal-youTubeId-textfield").value = song.youTubeId;
 
                 } else {
@@ -278,7 +282,7 @@ export default class PlaylisterController {
                     return; // Exit early if song is undefined
                 }
 
-                let oldSongArray = [song.title, song.artist, song.youTubeId];
+                let oldSongArray = [song.title, song.artist, song.year, song.youTubeId];
                 this.model.setOldSongArray(oldSongArray);
                 // OPEN UP THE MODAL
                 let editSongModal = document.getElementById("edit-song-modal");

@@ -407,7 +407,8 @@ export default class PlaylisterModel {
         let song = this.getSong(index);
         song.title = songArray[0];
         song.artist = songArray[1];
-        song.youTubeId = songArray[2];
+        song.year = songArray[2];
+        song.youTubeId = songArray[3];
         this.view.refreshSongCards(this.currentList);
         this.saveSongs();
     }
