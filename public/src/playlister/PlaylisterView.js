@@ -316,8 +316,11 @@ export default class PlaylisterView {
         let statusBar = document.getElementById("statusbar");
         if (hasCurrentList) {
             statusBar.innerHTML = currentListName;
+            this.disableButton("add-playlist-button");
         } else {
             statusBar.innerHTML = '';
+            this.enableButton("add-playlist-button");
+
         }
     }
 

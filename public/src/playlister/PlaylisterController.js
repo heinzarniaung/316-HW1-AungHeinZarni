@@ -207,7 +207,8 @@ export default class PlaylisterController {
             // DON'T PROPOGATE THIS INTERACTION TO LOWER-LEVEL CONTROLS
             this.ignoreParentClick(event);
             let originalList = this.model.getList(this.model.getListIndex(id));
-            this.model.addNewList(originalList.getName()+" (Copy)", originalList.songs);
+            let newList = this.model.addNewList(originalList.getName()+" (Copy)", originalList.songs);
+            this.model.selectList(newList);
         }
         // FOR RENAMING THE LIST NAME
         document.getElementById("playlist-card-" + id).ondblclick = (event) => {
