@@ -75,8 +75,8 @@ export default class PlaylisterController {
             // use modal inputs to change currentList
             let newSongTitle = document.getElementById("edit-song-modal-title-textfield").value;
             let newSongArtist = document.getElementById("edit-song-modal-artist-textfield").value;
-            let newSongYear = document.getElementById("edit-song-modal-year-textfield").value;
             let newSongYtId = document.getElementById("edit-song-modal-youTubeId-textfield").value;
+            let newSongYear = document.getElementById("edit-song-modal-year-textfield").value;
             let newSongArray = [newSongTitle, newSongArtist, newSongYear, newSongYtId];
             let oldSongArray = this.model.getOldSongArray();
             const songIndex = this.model.getEditSongIndex();
