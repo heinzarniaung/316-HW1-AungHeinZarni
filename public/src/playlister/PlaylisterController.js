@@ -84,6 +84,11 @@ export default class PlaylisterController {
             let editSongModal = document.getElementById("edit-song-modal");
             editSongModal.classList.remove("is-visible");
         }
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                document.getElementById("edit-song-confirm-button").onclick();
+            }
+        });
         // RESPOND TO THE f fUSER CONFIRMING TO DELETE A SONG
         document.getElementById("remove-song-confirm-button").onclick = (event) => {
             // NOTE THAT WE SET THE ID OF THE SONG TO REMOVE
@@ -101,6 +106,11 @@ export default class PlaylisterController {
             let removeSongModal = document.getElementById("remove-song-modal");
             removeSongModal.classList.remove("is-visible");
         }
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                document.getElementById("remove-song-confirm-button").onclick();
+            }
+        });
 
         // RESPOND TO THE USER CLOSING THE DELETE SONG MODAL
         document.getElementById("remove-song-cancel-button").onclick = (event) => {

@@ -72,6 +72,8 @@ export default class PlaylisterView {
 
         //look inside prototype for the first span tag.
         songCard.querySelector("a").id += id;
+        songCard.querySelector("a").href = "https://www.youtube.com/watch?v="+song.youTubeId;
+
         songCard.querySelector('span[id^="song-card-year-"]').id += id;
         songCard.querySelector('span[id^="song-card-by-"]').id += id;
         songCard.querySelector('span[id^="song-card-artist-"]').id += id;
@@ -331,6 +333,24 @@ export default class PlaylisterView {
         }
         else {
             this.enableButton("undo-button");
+        }
+        if (!hasTransactionToDo) {
+            this.disableButton("redo-button");
+        }
+        else {
+            this.enableButton("redo-button");
+        }
+        if (!isConfirmDialogOpen) {
+            this.enableButton("close-button");
+        }
+        else {
+            this.disableButton("close-button");
+        }
+        if (hasCurrentList) {
+            this.enableButton("add-song-button");
+        }
+        else {
+            this.disableButton("add-song-button");
         }
     }
 }
