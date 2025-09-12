@@ -69,7 +69,6 @@
             <input id="delete-list-button-"
                 type="button" class="playlist-card-button"
                 value="🗑" />
-
         </div>
 
         
@@ -114,6 +113,23 @@
                 <div class="modal-south">
                     <input type="button" id="delete-list-confirm-button" class="modal-button" value='Confirm' />
                     <input type="button" id="delete-list-cancel-button" class="modal-button" value='Cancel' />
+                </div>
+            </div>
+        </div>
+        <!-- MODAL (i.e. dialog) FOR VERIFYING THE DELETION OF A SONG -->
+        <div class="modal" id="remove-song-modal" data-animation="slideInOutLeft">
+            <div class="modal-root" id='verify-remove-song-root'>
+                <div class="modal-north">
+                    Remove song?
+                </div>                
+                <div class="modal-center">
+                    <div class="modal-center-content">
+                        Are you sure you wish to remove <span id="remove-song-span"></span> from playlist?
+                    </div>
+                </div>
+                <div class="modal-south">
+                    <input type="button" id="remove-song-confirm-button" class="modal-button" value='Confirm' />
+                    <input type="button" id="remove-song-cancel-button" class="modal-button" value='Cancel' />
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ import CreateSong_Transaction from "./transactions/CreateSong_Transaction.js";
 import MoveSong_Transaction from "./transactions/MoveSong_Transaction.js";
 import RemoveSong_Transaction from "./transactions/RemoveSong_Transaction.js";
 import PlaylistBuilder from './PlaylistBuilder.js';
+import EditSong_Transaction from './transactions/EditSong_Transaction.js';
 
 /**
  * PlaylisterModel.js
@@ -40,6 +41,12 @@ export default class PlaylisterModel {
 
         // PREVENTS LOADING THE WRONG LIST NAME IN THE STATUS BAR
         this.listNameBeingChanged = false;
+
+        this.removeSongIndex = null;
+
+        this.editSongIndex = null;
+
+        this.oldSongArray = null;
     }
 
     /**
@@ -111,6 +118,19 @@ export default class PlaylisterModel {
     }
 
     /**
+     * Adds an undoable transaction for editing a song to the transaction stack.
+     * 
+     * @param {number} index The index of the transaction to remove
+     */
+    addTransactionToEditSong(index, oldSongArray, newSongArray) {
+        let song = this.getSong(index);
+        let transaction = new EditSong_Transaction(this, index, oldSongArray, newSongArray);
+        this.tps.processTransaction(transaction);
+        this.view.updateToolbarButtons(this.hasCurrentList(), 
+                            this.confirmDialogOpen, this.tps.hasTransactionToDo(), this.tps.hasTransactionToUndo());
+    }
+
+    /**
      * Inserts the song argument into the playlist at index. Note, after being placed
      * this will rerendering the user interface to reflect the new song and will also
      * save the changes to local storage.
@@ -172,6 +192,16 @@ export default class PlaylisterModel {
     }
 
     /**
+     * Accessor method for getting the index of the list to delete. This is used
+     * during the modal verification.
+     * 
+     * @return {number} The id of the list being deleted.
+     */
+    getRemoveSongIndex() {
+        return this.removeSongIndex;
+    }
+
+    /**
      * Accessor method for getting the index of the list with id
      * 
      * @param {number} id The id of the list to find
@@ -218,6 +248,10 @@ export default class PlaylisterModel {
      */    
     getSong(index) {
         return this.currentList.songs[index];
+    }
+
+    getOldSongArray() {
+        return this.oldSongArray;
     }
 
     /**
@@ -363,6 +397,21 @@ export default class PlaylisterModel {
         this.saveLists();
     }
 
+    
+    /**
+     * Edits the song at index from the currently loaded playlist
+     * 
+     * @param {number} index The location in the playlist of the song to edit, 0 is the first song.
+     */
+    editSong(index, songArray) {
+        let song = this.getSong(index);
+        song.title = songArray[0];
+        song.artist = songArray[1];
+        song.newYtId = songArray[2];
+        this.view.refreshSongCards(this.currentList);
+        this.saveSongs();
+    }
+
     /**
      * Renames the currently selected list using the provided name
      * 
@@ -396,6 +445,16 @@ export default class PlaylisterModel {
     }
 
     /**
+     * Saves all the songs to the browser's local storage.
+     */
+    saveSongs() {
+        let songsString = JSON.stringify(this.currentList.songs);
+        localStorage.setItem("recent_work", songsString);
+    }
+
+
+
+    /**
      * Selects the list argument, setting it as the current list and updating the view
      * such that its songs can be viewed and edited.
      * 
@@ -417,6 +476,16 @@ export default class PlaylisterModel {
      */
     setDeleteListId(initId) {
         this.deleteListId = initId;
+    }
+
+    /**
+     * Mutator method for setting the song to remove, which is used such that
+     * the dialog event handler verification can coordinate a proper response.
+     * 
+     * @param {number} initId The id of the list to delete.
+     */
+    setRemoveSongIndex(initIndex) {
+        this.removeSongIndex = initIndex;
     }
 
     /**
@@ -452,6 +521,10 @@ export default class PlaylisterModel {
      */
     setView(initView) {
         this.view = initView;
+    }
+
+    setOldSongArray(oldSongArray) {
+        this.oldSongArray = oldSongArray;
     }
 
     /**
